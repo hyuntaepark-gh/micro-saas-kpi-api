@@ -1,5 +1,7 @@
 # 🚀 AI Micro-SaaS KPI Insight Engine
 
+> Ask questions like **"Why did revenue drop last quarter?"** and get automated SQL analysis + executive AI insights.
+
 An AI-powered analytics micro-service that converts natural language questions into  
 data-driven SQL analysis and executive-ready KPI narratives.
 
@@ -23,9 +25,10 @@ This system simulates an **AI analytics product** that automatically:
 
 Example:
 
+```
 POST /ask
-
 "Why did revenue drop last quarter?"
+```
 
 ⬇️ Automatically performs:
 
@@ -55,6 +58,26 @@ API Response + History Logging
 
 ---
 
+## 🔄 AI Insight Flow
+
+```
+User Question
+↓
+AI Parser (/ask)
+↓
+Metric + Range Detection
+↓
+Dynamic SQL Builder
+↓
+PostgreSQL KPI Warehouse
+↓
+LLM Narrative Generator
+↓
+Executive Insight API Response
+```
+
+---
+
 # ⚙️ Tech Stack
 
 Backend:
@@ -68,10 +91,11 @@ Data Layer:
 - PostgreSQL
 - Psycopg2
 
-AI Layer:
+AI / Analytics:
 
-- LLM Narrative Generation
-- Natural Language → KPI Parsing
+- Natural Language KPI Parsing
+- Dynamic SQL Generation Engine
+- Executive Narrative Generation
 
 Infra:
 
@@ -107,7 +131,6 @@ Example:
 "ranges": ["last_2_months","last_3_months","last_6_months","ytd"]
 }
 ```
-
 
 ---
 
@@ -156,6 +179,7 @@ Example:
 }
 ```
 
+
 ---
 
 ## Reports
@@ -182,6 +206,28 @@ Returns past analyses with:
 - risk
 - recommendation
 - timestamp
+
+---
+
+## ⚡ Quick Demo
+
+1️⃣ Ask a business question
+
+```
+POST /ask
+{
+"question": "Why did revenue drop last quarter?"
+}
+```
+
+---
+
+2️⃣ API automatically:
+
+- Detects KPI metric
+- Builds SQL query
+- Retrieves warehouse data
+- Generates AI narrative insights
 
 ---
 
@@ -249,6 +295,14 @@ Key capabilities shown:
 
 This design reflects how modern companies build
 AI-assisted decision intelligence platforms.
+
+---
+
+## 🧩 Real-World Design Inspiration
+
+This project reflects how modern analytics platforms evolve from dashboards
+into AI-powered decision engines, enabling stakeholders to interact with
+data through natural language instead of manual analysis.
 
 ---
 
