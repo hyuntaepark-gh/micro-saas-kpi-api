@@ -11,33 +11,30 @@
 ![AI SaaS](https://img.shields.io/badge/AI-SaaS%20Architecture-232F3E)
 ![Driver Analysis](https://img.shields.io/badge/KPI-Driver%20Decomposition-00897B)
 
-> Ask questions like **"Why did performance drop?"** and receive automated driver analysis, risk signals, and executive-ready AI insights.
+> Built as a **Product-Grade AI Analytics Backend** demonstrating  
+> Data Engineering, Backend Architecture, and Decision Intelligence design.
+> Ask questions like **"Why did performance drop?"** and receive automated driver analysis, risk signals, anomaly detection, and executive-ready AI insights.
 
-An AI-powered analytics backend that transforms natural language questions into KPI analysis, business drivers, and decision intelligence.
-
-This project demonstrates how modern analytics systems evolve from dashboards into **AI-driven decision engines** using a micro-SaaS architecture.
-
----
-
-## 🧠 AI Executive Decision Intelligence Engine
-
-An AI-powered KPI analytics micro-service that converts business questions into:
-
-- Driver decomposition
-- Risk scoring
-- Executive insight generation
-
-### 🔥 Core Capabilities
-
-- 🤖 Multi-Metric AI Agent Analysis  
-- 📊 Driver Decomposition Engine  
-- ⚠️ Risk Signal & Decision Scoring  
-- 🧠 Executive Narrative Generation  
-- 🐳 Dockerized Micro-SaaS Architecture  
+An AI-powered analytics backend that transforms natural language questions into KPI analysis, business drivers, and decision intelligence using a **Micro-SaaS product architecture**.
 
 ---
 
-### ⚡ AI Insight Pipeline
+# 🧠 AI Executive Decision Intelligence Engine
+
+This system simulates a modern AI analytics product that automatically:
+
+- Detects KPI intent from natural language
+- Generates dynamic SQL queries
+- Performs driver decomposition
+- Calculates risk signals
+- Produces executive narratives
+- Detects KPI anomalies
+- Runs what-if simulations
+- Supports async AI jobs
+
+---
+
+## ⚡ AI Insight Pipeline
 
 ```
 User Question
@@ -49,49 +46,14 @@ User Question
 
 ---
 
-## 🧠 Project Overview
-
-Traditional BI tools require manual exploration.
-
-This system simulates an **AI analytics product** that automatically:
-
-- Detects KPI intent from natural language
-- Generates dynamic SQL queries
-- Performs driver decomposition
-- Calculates risk signals
-- Produces executive narratives
-- Stores analysis history
-
-Example:
-
-```
-POST /ask
-{
-"question": "Why did performance drop?"
-}
-```
-
-⬇️ Pipeline:
-
-
-```
-Natural Language
-→ AI Agent
-→ Driver Analysis
-→ Decision Engine
-→ Executive Report
-```
-
----
-
 # 🏗️ Architecture
 
 ```
-User Question (/ask)
+Client
 ↓
-Agent Intelligence Layer
+FastAPI Product API (/v1/*)
 ↓
-Metric Detection + Intent Service
+Agent Intelligence Router
 ↓
 Dynamic SQL Builder
 ↓
@@ -99,133 +61,188 @@ PostgreSQL KPI Warehouse
 ↓
 Driver Decomposition Engine
 ↓
-Decision Signal Engine (Risk Score)
+Decision Signal Engine
 ↓
 Executive Report Formatter
-↓
-API Response + History Logging
 ```
 
 ---
 
-## 🔄 AI Insight Flow
-
-```
-User Question
-↓
-AI Agent Router
-↓
-Multi-Metric Analysis
-↓
-Driver Summary
-↓
-Decision Signals (risk_score)
-↓
-Executive Narrative Builder
-↓
-Final Executive Response
-```
-
----
-
-## ⚙️ Tech Stack
-
-### Backend
+## Backend
 
 - FastAPI
 - Python
-- Pydantic
+- Pydantic v2
 
-### Data Layer
+## Data Layer
 
 - PostgreSQL
-- Psycopg2
 - Dynamic SQL Builder
 
-### AI / Decision Intelligence
+## AI / Decision Intelligence
 
 - Agent Intelligence Engine
 - Driver Decomposition Service
 - Risk Scoring Engine
-- Executive Report Formatter
-- LLM Planning Layer
+- Executive Narrative Generator
+- KPI Anomaly Detection
+- What-If Simulation Engine
 
-### Infra
+## Infra
 
 - Docker
 - Docker Compose
+- API Key Security
 
 ---
 
-## 🔌 API Endpoints
+# 🔐 Product API (v1)
 
-### Base
+All production endpoints live under:
 
-- `GET /`
-- `GET /health`
+```
+/v1/*
 
-### Discovery
+```
 
-`GET /meta`
+Requires:
 
-### KPI Management
+```
+X-API-Key
+```
 
-- `GET /kpi`
-- `POST /kpi`
+Swagger → Authorize 버튼 사용.
 
 ---
 
-## 🧠 AI Analytics Engine
+# 🤖 AI Analytics Engine
 
-### `POST /ask` ⭐ (Primary Entry Point)
+## Primary Entry
 
-Natural language → AI executive analysis.
+```
+POST /v1/agent/query
+```
+
+Natural language → Executive AI analysis.
 
 Returns:
 
-- multi-metric analysis
 - driver_summary
-- decision signals (risk_score)
+- decision signals
 - executive report
 
 ---
 
-### `POST /analyze`
+## Executive Narrative Only
 
-Direct KPI metric analysis.
+```
+POST /v1/ask-executive
+```
+
+Clean CFO-style output.
 
 ---
 
-## 📊 Reports
+## 🧠 Debug Trace (Product-grade)
 
-- `GET /report/monthly`
-- `POST /report/monthly-ai`
+Shows:
 
----
+- routing mode
+- fallback decision
+- agent execution trace
 
-## 🧾 SaaS History Feature
-
-`GET /history`
-
-Stores past AI analyses including SQL, narrative, risk, and recommendations.
+(No chain-of-thought exposed)
 
 ---
 
-## 🎬 Demo Flow
+## 📈 Explain KPI Drivers (No LLM)
 
 ```
-Insert KPI Data
-→ Ask Business Question
-→ AI Agent Analysis
-→ Driver Detection
-→ Risk Signal Generation
-→ Executive Report Response
+GET /v1/agent/explain
 ```
 
-Example question:
+Rule-based KPI breakdown.
+
+---
+
+## 🚨 Auto Insight Detection
 
 ```
-POST /ask
+POST /v1/agent/insight
+```
+
+Detects KPI anomalies.
+
+---
+
+## 🔮 What-If Simulation
+
+```
+POST /v1/agent/simulate
+```
+
+Revenue ≈ Orders × AOV scenario testing.
+
+---
+
+# ⚡ Async AI Jobs (Senior DE Feature)
+
+## Submit Async Query
+
+```
+POST /v1/agent/query-async
+```
+
+Returns:
+
+```
+job_id
+```
+
+---
+
+## Poll Job Result
+
+```
+GET /v1/jobs/{job_id}
+```
+
+Simulates production AI background processing.
+
+---
+
+# 📊 Dashboard Endpoint (Frontend Ready)
+
+```
+GET /v1/dashboard
+```
+
+Provides:
+
+- KPI tiles
+- trend summary
+- alerts
+- risk signals
+
+Designed for frontend MVP integration.
+
+---
+
+# 🎬 Demo Flow
+
+## 1️⃣ Seed KPI Data
+
+```
+POST /v1/seed-demo
+```
+
+
+---
+
+## 2️⃣ Ask Executive AI
+
+```
+POST /v1/ask-executive
 {
 "question": "Why did performance drop?"
 }
@@ -233,47 +250,21 @@ POST /ask
 
 ---
 
-# ⚡ Quick Demo
-
-1️⃣ Insert KPI data
+## 3️⃣ Detect KPI Risk
 
 ```
-POST /kpi
+POST /v1/agent/insight
+{}
 ```
 
 ---
 
-2️⃣ Ask AI:
+## 4️⃣ Run What-If Simulation
 
 ```
-POST /ask
+POST /v1/agent/simulate
 {
-"question": "Why did performance drop?"
-}
-```
-
----
-
-3️⃣ Receive:
-
-```
-Driver analysis
-Risk score
-Executive narrative
-```
-
----
-
-# 🧪 Example Executive Output
-
-```
-{
-"main_driver": "orders",
-"risk_signal": "LOW",
-"trend_direction": "UP",
-"risk_score": 10,
-"executive_takeaway":
-"Revenue change is primarily driven by order volume."
+"orders_delta_pct": 0.1
 }
 ```
 
@@ -285,7 +276,7 @@ Executive narrative
 docker compose up --build
 ```
 
-Swagger UI:
+Swagger:
 
 ```
 http://localhost:8000/docs
@@ -293,56 +284,49 @@ http://localhost:8000/docs
 
 ---
 
-## 🎯 Why This Project Matters
+# 🎯 Why This Project Matters
 
-Modern analytics platforms are evolving into **decision intelligence systems**.
+Modern analytics platforms are evolving into **Decision Intelligence Systems**.
 
 This project demonstrates:
 
 - AI Agent-driven analytics
-- Executive-level KPI storytelling
-- Driver-based business reasoning
-- Risk signal generation
-- API-first AI SaaS architecture
+- Executive-level KPI reasoning
+- Product-grade FastAPI architecture
+- Async AI job processing
+- Frontend-ready API design
+- Micro-SaaS backend system
 
 ---
 
-## 🧩 Real-World Inspiration
+# 🧩 Designed For
 
-Inspired by:
-
-- AI Analytics Platforms
-- Executive BI Automation
+- AI Backend Engineering
+- Data Engineering (API-first analytics)
 - Decision Intelligence Systems
+- Micro-SaaS Architecture
 
 ---
 
-## 🚀 Future Extensions
+# 🧠 Positioning
 
-- Auto SQL generation from natural language
-- Risk visual signals for frontend dashboards
-- KPI anomaly detection
-- Streaming KPI ingestion
-- Frontend AI dashboard
+```
+BI Dashboard → AI Analytics Engine → Decision Intelligence SaaS
+```
 
----
-
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```
 api/
 ├── app/
 │ ├── services/
-│ │ ├── agent_intelligence.py
-│ │ ├── decision_service.py
-│ │ ├── driver_service.py
-│ │ ├── report_formatter.py
-│ │ └── analyze_service.py
-│ ├── schemas.py
-│ └── db.py
-├── llm/
+│ ├── security/
+│ ├── utils/
+│ └── schemas.py
 ├── routers/
-│ ├── kpi.py
-│ └── demo.py
+│ ├── ask_text.py
+│ ├── jobs.py
+│ ├── dashboard.py
+│ └── meta.py
 └── main.py
 ```
