@@ -1,10 +1,15 @@
 # 🚀 AI Executive KPI Intelligence Micro-SaaS
 
-![FastAPI](https://img.shields.io/badge/FastAPI-API-green)
-![Docker](https://img.shields.io/badge/Docker-Container-blue)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-316192)
-![AI Agent](https://img.shields.io/badge/AI-Agent-purple)
-![Decision Engine](https://img.shields.io/badge/Decision-Intelligence-orange)
+![FastAPI](https://img.shields.io/badge/FastAPI-Micro%20SaaS-009688?logo=fastapi&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-KPI%20Warehouse-336791?logo=postgresql&logoColor=white)
+![LLM Agent](https://img.shields.io/badge/LLM-Agent%20Intelligence-6A1B9A)
+![Dynamic SQL](https://img.shields.io/badge/Dynamic-SQL%20Builder-0A66C2)
+![Decision Engine](https://img.shields.io/badge/Decision-Intelligence-FF7043)
+![Risk Scoring](https://img.shields.io/badge/Risk-Scoring%20Engine-2E7D32)
+![Executive AI](https://img.shields.io/badge/Executive-AI%20Analytics-FF6F00)
+![AI SaaS](https://img.shields.io/badge/AI-SaaS%20Architecture-232F3E)
+![Driver Analysis](https://img.shields.io/badge/KPI-Driver%20Decomposition-00897B)
 
 > Ask questions like **"Why did performance drop?"** and receive automated driver analysis, risk signals, and executive-ready AI insights.
 
