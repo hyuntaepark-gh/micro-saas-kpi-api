@@ -1,39 +1,47 @@
-# 🚀 AI Micro-SaaS KPI Insight Engine
+# 🚀 AI Executive KPI Intelligence Micro-SaaS
 
-> Ask questions like **"Why did revenue drop last quarter?"** and get automated SQL analysis + executive AI insights.
+> Ask questions like **"Why did performance drop?"** and receive
+automated driver analysis, risk signals, and executive-ready AI insights.
 
-An AI-powered analytics micro-service that converts natural language questions into  
-data-driven SQL analysis and executive-ready KPI narratives.
+An AI-powered analytics backend that transforms natural language
+questions into KPI analysis, business drivers, and decision intelligence.
 
-This Dockerized FastAPI backend demonstrates how modern analytics platforms
-combine **data engineering, business logic, and LLM-driven insights**
-into a production-style micro SaaS architecture.
+This project demonstrates how modern analytics systems evolve from
+dashboards into **AI-driven decision engines** using a micro-SaaS architecture.
 
 ---
 
 # 🧠 Project Overview
 
-Traditional dashboards require manual exploration.
+Traditional BI tools require manual exploration.
 
 This system simulates an **AI analytics product** that automatically:
 
-- Parses business questions
-- Generates SQL queries
-- Retrieves KPI data
-- Produces executive insights
+- Detects KPI intent from natural language
+- Generates dynamic SQL queries
+- Performs driver decomposition
+- Calculates risk signals
+- Produces executive narratives
 - Stores analysis history
 
 Example:
 
 ```
 POST /ask
-"Why did revenue drop last quarter?"
+{
+"question": "Why did performance drop?"
+}
 ```
 
-⬇️ Automatically performs:
+⬇️ Pipeline:
+
 
 ```
-Natural Language → Metric Detection → SQL Builder → KPI Analysis → AI Narrative
+Natural Language
+→ AI Agent
+→ Driver Analysis
+→ Decision Engine
+→ Executive Report
 ```
 
 ---
@@ -43,15 +51,19 @@ Natural Language → Metric Detection → SQL Builder → KPI Analysis → AI Na
 ```
 User Question (/ask)
 ↓
-AI Parser (Metric + Range Detection)
+Agent Intelligence Layer
 ↓
-Analytics Service Layer
+Metric Detection + Intent Service
 ↓
 Dynamic SQL Builder
 ↓
 PostgreSQL KPI Warehouse
 ↓
-LLM Insight Generator
+Driver Decomposition Engine
+↓
+Decision Signal Engine (Risk Score)
+↓
+Executive Report Formatter
 ↓
 API Response + History Logging
 ```
@@ -63,41 +75,47 @@ API Response + History Logging
 ```
 User Question
 ↓
-AI Parser (/ask)
+AI Agent Router
 ↓
-Metric + Range Detection
+Multi-Metric Analysis
 ↓
-Dynamic SQL Builder
+Driver Summary
 ↓
-PostgreSQL KPI Warehouse
+Decision Signals (risk_score)
 ↓
-LLM Narrative Generator
+Executive Narrative Builder
 ↓
-Executive Insight API Response
+Final Executive Response
 ```
+
+---
+
 
 ---
 
 # ⚙️ Tech Stack
 
-Backend:
+## Backend
 
 - FastAPI
 - Python
 - Pydantic
 
-Data Layer:
+## Data Layer
 
 - PostgreSQL
 - Psycopg2
+- Dynamic SQL Builder
 
-AI / Analytics:
+## AI / Decision Intelligence
 
-- Natural Language KPI Parsing
-- Dynamic SQL Generation Engine
-- Executive Narrative Generation
+- Agent Intelligence Engine
+- Driver Decomposition Service
+- Risk Scoring Engine
+- Executive Report Formatter
+- LLM Planning Layer
 
-Infra:
+## Infra
 
 - Docker
 - Docker Compose
@@ -123,15 +141,6 @@ Returns supported:
 - ranges
 - styles
 
-Example:
-
-```
-{
-"metrics": ["revenue","orders","customers","aov"],
-"ranges": ["last_2_months","last_3_months","last_6_months","ytd"]
-}
-```
-
 ---
 
 ## KPI Management
@@ -141,48 +150,36 @@ Example:
 
 ---
 
-## AI Analytics
+## 🧠 AI Analytics Engine
 
-### `POST /ask` ⭐ (AI Entry Point)
+### `POST /ask` ⭐ (Primary Entry Point)
 
-Natural language → automatic KPI analysis.
+Natural language → AI executive analysis.
 
 Example:
 
 ```
 {
-"question": "Why did revenue drop recently?"
+"question": "Why did performance drop?"
 }
 ```
 
-
 Returns:
 
-- parsed metric/range
-- generated SQL
-- KPI data
-- executive narrative
+- multi-metric analysis
+- driver_summary
+- decision signals (risk_score)
+- executive report
 
 ---
 
 ### `POST /analyze`
 
-Direct metric analysis.
-
-Example:
-
-```
-{
-"metric": "revenue",
-"range": "last_3_months",
-"style": "executive"
-}
-```
-
+Direct KPI metric analysis.
 
 ---
 
-## Reports
+## 📊 Reports
 
 ### `GET /report/monthly`
 
@@ -190,15 +187,15 @@ Rule-based KPI comparison.
 
 ### `POST /report/monthly-ai`
 
-AI-generated monthly executive summary.
+LLM-generated executive summary.
 
 ---
 
-## History (SaaS Feature)
+## 🧾 SaaS History Feature
 
 ### `GET /history`
 
-Returns past analyses with:
+Stores past AI analyses:
 
 - metric
 - SQL
@@ -209,35 +206,47 @@ Returns past analyses with:
 
 ---
 
-## ⚡ Quick Demo
+# ⚡ Quick Demo
 
-1️⃣ Ask a business question
+1️⃣ Insert KPI data
+
+```
+POST /kpi
+```
+
+---
+
+2️⃣ Ask AI:
 
 ```
 POST /ask
 {
-"question": "Why did revenue drop last quarter?"
+"question": "Why did performance drop?"
 }
 ```
 
 ---
 
-2️⃣ API automatically:
+3️⃣ Receive:
 
-- Detects KPI metric
-- Builds SQL query
-- Retrieves warehouse data
-- Generates AI narrative insights
+```
+Driver analysis
+Risk score
+Executive narrative
+```
 
 ---
 
-# 🧪 Example AI Insight Output
+# 🧪 Example Executive Output
 
 ```
 {
-"narrative": "Revenue decreased mainly due to declining orders.",
-"risk": "Customer acquisition slowdown detected.",
-"recommendation": "Focus on acquisition campaigns and conversion optimization."
+"main_driver": "orders",
+"risk_signal": "LOW",
+"trend_direction": "UP",
+"risk_score": 10,
+"executive_takeaway":
+"Revenue change is primarily driven by order volume."
 }
 ```
 
@@ -264,51 +273,53 @@ http://localhost:8000/docs
 api/
 ├── app/
 │ ├── services/
-│ │ ├── analyze_service.py
-│ │ ├── report_service.py
-│ │ ├── kpi_service.py
-│ │ ├── ask_service.py
-│ │ └── log_service.py
+│ │ ├── agent_intelligence.py
+│ │ ├── decision_service.py
+│ │ ├── driver_service.py
+│ │ ├── report_formatter.py
+│ │ └── analyze_service.py
 │ ├── schemas.py
-│ ├── db.py
-│ └── main.py
-├── db/
-│ └── init.sql
-└── docker-compose.yml
+│ └── db.py
+├── llm/
+├── routers/
+│ ├── kpi.py
+│ └── demo.py
+└── main.py
 ```
 
 ---
 
 # 🎯 Why This Project Matters
 
-This project demonstrates a real-world evolution of analytics systems:
+Modern analytics platforms are evolving into **decision intelligence systems**.
 
-Instead of dashboards only, analytics becomes an **API-first product**.
+This project demonstrates:
 
-Key capabilities shown:
+- AI Agent-driven analytics
+- Executive-level KPI storytelling
+- Driver-based business reasoning
+- Risk signal generation
+- API-first AI SaaS architecture
 
-- Dynamic SQL generation
-- AI-driven business insight automation
-- Analytics micro-service architecture
-- Natural language analytics interfaces
-- History logging for SaaS-style analytics products
-
-This design reflects how modern companies build
-AI-assisted decision intelligence platforms.
+It reflects how real companies build internal AI decision engines
+on top of data warehouses.
 
 ---
 
-## 🧩 Real-World Design Inspiration
+# 🧩 Real-World Inspiration
 
-This project reflects how modern analytics platforms evolve from dashboards
-into AI-powered decision engines, enabling stakeholders to interact with
-data through natural language instead of manual analysis.
+Inspired by modern:
+
+- AI Analytics Platforms
+- Executive BI Automation
+- Decision Intelligence Systems
 
 ---
 
 # 🚀 Future Extensions
 
-- LLM-based metric detection (full AI parser)
-- Multi-metric AI agent analysis
+- Auto SQL generation from natural language
+- Risk visual signals for frontend dashboards
+- KPI anomaly detection
 - Streaming KPI ingestion
-- Frontend SaaS dashboard
+- Frontend AI dashboard
