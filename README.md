@@ -1,15 +1,40 @@
 # 🚀 AI Executive KPI Intelligence Micro-SaaS
 
-> Ask questions like **"Why did performance drop?"** and receive
-automated driver analysis, risk signals, and executive-ready AI insights.
+> Ask questions like **"Why did performance drop?"** and receive automated driver analysis, risk signals, and executive-ready AI insights.
 
-An AI-powered analytics backend that transforms natural language
-questions into KPI analysis, business drivers, and decision intelligence.
+An AI-powered analytics backend that transforms natural language questions into KPI analysis, business drivers, and decision intelligence.
 
-This project demonstrates how modern analytics systems evolve from
-dashboards into **AI-driven decision engines** using a micro-SaaS architecture.
+This project demonstrates how modern analytics systems evolve from dashboards into **AI-driven decision engines** using a micro-SaaS architecture.
 
 ---
+
+## 🧠 AI Executive Decision Intelligence Engine
+
+An AI-powered KPI analytics micro-service that converts business questions into:
+
+- Driver decomposition
+- Risk scoring
+- Executive insight generation
+
+### 🔥 Core Capabilities
+
+- 🤖 Multi-Metric AI Agent Analysis  
+- 📊 Driver Decomposition Engine  
+- ⚠️ Risk Signal & Decision Scoring  
+- 🧠 Executive Narrative Generation  
+- 🐳 Dockerized Micro-SaaS Architecture  
+
+---
+
+### ⚡ AI Insight Pipeline
+
+```
+User Question
+→ Agent Intelligence
+→ KPI Driver Analysis
+→ Decision Engine
+→ Executive Report
+```
 
 # 🧠 Project Overview
 
