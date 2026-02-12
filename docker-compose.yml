@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   postgres:
     container_name: micro_postgres
@@ -24,8 +22,9 @@ services:
     volumes:
       - .:/app
     environment:
-      - OPENAI_API_KEY: ${OPENAI_API_KEY}
-      - OPENAI_MODEL=gpt-4.1-mini
-      - DATABASE_URL=postgresql+psycopg2://admin:admin123@postgres:5432/analytics
+    - OPENAI_API_KEY=${OPENAI_API_KEY}
+    - OPENAI_MODEL=gpt-4.1-mini
+    -  DATABASE_URL=postgresql+psycopg2://admin:admin123@postgres:5432/analytics
+    - API_KEY=dev-secret-key
     depends_on:
       - postgres

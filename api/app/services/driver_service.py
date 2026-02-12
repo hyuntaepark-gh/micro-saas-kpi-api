@@ -152,3 +152,82 @@ def build_driver_summary(outputs: List[Any]) -> Dict[str, Any]:
         "executive_takeaway": executive_takeaway,
         "executive_summary": executive_summary,
     }
+from typing import Any, Dict, List, Optional
+
+def _pct_change(prev: Optional[float], curr: Optional[float]) -> Optional[float]:
+    if prev is None or curr is None:
+        return None
+    try:
+        prev_f = float(prev)
+        curr_f = float(curr)
+        if prev_f == 0:
+            return None
+        return (curr_f - prev_f) / prev_f * 100.0
+    except Exception:
+        return None
+
+
+def build_driver_summary_from_rows(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Driver decomposition using the last two months from rows (oldest -> newest).
+    Requires at least 2 rows and at least revenue + (orders or aov).
+    """
+    if not rows or len(rows) < 2:
+        return {
+            "status": "insufficient_data",
+            "message": "Need at least 2 months of KPI rows to compute drivers.",
+            "latest_month": None,
+            "previous_month": None,
+            "changes_pct": {"revenue": None, "orders": None, "aov": None, "customers": None},
+        }
+
+    prev = rows[-2]
+    curr = rows[-1]
+
+    latest_month = curr.get("month")
+    previous_month = prev.get("month")
+
+    rev_pct = _pct_change(prev.get("revenue"), curr.get("revenue"))
+    ord_pct = _pct_change(prev.get("orders"), curr.get("orders"))
+    aov_pct = _pct_change(prev.get("aov"), curr.get("aov"))
+    cus_pct = _pct_change(prev.get("customers"), curr.get("customers"))
+
+    if rev_pct is None or (ord_pct is None and aov_pct is None):
+        return {
+            "status": "insufficient_data",
+            "message": "Need at least 2 months of KPI data for revenue/orders/aov to compute drivers.",
+            "latest_month": latest_month,
+            "previous_month": previous_month,
+            "changes_pct": {"revenue": rev_pct, "orders": ord_pct, "aov": aov_pct, "customers": cus_pct},
+        }
+
+    # main driver = bigger absolute mover between orders vs aov
+    if ord_pct is not None and aov_pct is not None:
+        main_driver = "orders" if abs(ord_pct) >= abs(aov_pct) else "aov"
+    elif ord_pct is not None:
+        main_driver = "orders"
+    else:
+        main_driver = "aov"
+
+    executive_takeaway = (
+        "Revenue change is mainly driven by Orders."
+        if main_driver == "orders"
+        else "Revenue change is mainly driven by AOV."
+    )
+
+    # One-liner summary
+    executive_summary = (
+        f"Revenue changed {rev_pct:.1f}% MoM, driven primarily by "
+        f"{'orders' if main_driver == 'orders' else 'AOV'} "
+        f"({(ord_pct if ord_pct is not None else 0.0):.1f}% / {(aov_pct if aov_pct is not None else 0.0):.1f}%)."
+    )
+
+    return {
+        "status": "ok",
+        "latest_month": latest_month,
+        "previous_month": previous_month,
+        "changes_pct": {"revenue": rev_pct, "orders": ord_pct, "aov": aov_pct, "customers": cus_pct},
+        "main_driver": main_driver,
+        "executive_takeaway": executive_takeaway,
+        "executive_summary": executive_summary,
+    }

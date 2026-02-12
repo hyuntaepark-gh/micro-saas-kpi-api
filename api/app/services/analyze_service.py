@@ -1,57 +1,89 @@
+from __future__ import annotations
+
+from typing import Tuple, Optional, Dict, Any, List
+from datetime import date
+
 from ..db import get_conn
 
-def _range_to_limit(range_: str) -> str:
-    # Limit by rows after ordering; since months are discrete, this works for a demo MVP.
+import os
+from openai import OpenAI
+
+
+# -----------------------------
+# SQL Builder
+# -----------------------------
+
+def _range_to_limit(range_: str) -> Optional[int]:
+    """
+    Demo MVP: Use LIMIT over month DESC ordering.
+    """
+    if range_ == "last_2_months":
+        return 2
     if range_ == "last_3_months":
-        return "3"
+        return 3
     if range_ == "last_6_months":
-        return "6"
-    return None  # all
+        return 6
+    return None  # ytd / all
+
 
 def build_metric_sql(metric: str, range_: str) -> str:
-    # metric comes from strict Literal in schema, so safe.
-    limit = _range_to_limit(range_)
-    base = f"""
-        SELECT month, revenue, orders, customers, aov
-        FROM kpi_monthly
-        ORDER BY month DESC
     """
+    Build the *actual SQL* used for KPI retrieval.
+    NOTE: We always fetch all KPI columns so downstream driver/risk logic can use them.
+    Metric is used mainly for semantics (what we narrate), not for column selection.
+    """
+    limit = _range_to_limit(range_)
+
+    base = """
+SELECT month, revenue, orders, customers, aov
+FROM kpi_monthly
+ORDER BY month DESC
+""".strip()
+
     if limit:
         base += f"\nLIMIT {limit};"
     else:
         base += ";"
-    return base.strip()
 
-def fetch_metric_rows(sql: str):
+    return base
+
+
+def fetch_metric_rows(sql: str) -> List[Dict[str, Any]]:
     conn = get_conn(dict_cursor=True)
     cur = conn.cursor()
     cur.execute(sql)
     rows = cur.fetchall()
     cur.close()
     conn.close()
+
     # We ordered DESC, but for narrative it’s nicer ASC
     return list(reversed(rows))
 
-def build_narrative(metric: str, rows: list[dict], style: str = "executive"):
+
+# -----------------------------
+# Rule-based Narrative
+# -----------------------------
+
+def build_narrative(metric: str, rows: List[Dict[str, Any]], style: str = "executive") -> Tuple[str, str, str]:
     if not rows:
         return ("No data found.", "No risk signals.", "Insert KPI data first.")
 
     first = rows[0]
     last = rows[-1]
 
-    def pct_change(a, b):
+    def pct_change(a: Optional[float], b: Optional[float]) -> Optional[float]:
         if a in (None, 0):
             return None
         return (b - a) / a
 
-    # choose metric value
     metric_map = {
         "revenue": "revenue",
         "orders": "orders",
         "customers": "customers",
         "aov": "aov",
     }
-    col = metric_map[metric]
+    col = metric_map.get(metric, "revenue")
+
     start = float(first[col])
     end = float(last[col])
     chg = end - start
@@ -64,7 +96,6 @@ def build_narrative(metric: str, rows: list[dict], style: str = "executive"):
     else:
         headline = f"{metric.upper()} {direction} from {first['month']} to {last['month']} ({chg_pct*100:.1f}%)."
 
-    # simple risk rules
     risk = "No major risk signals detected."
     recommendation = "Keep monitoring trends."
 
@@ -97,13 +128,19 @@ def build_narrative(metric: str, rows: list[dict], style: str = "executive"):
 
     return (narrative, risk, recommendation)
 
-from openai import OpenAI
-import os
-from typing import Tuple
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# -----------------------------
+# LLM Narrative (with fallback)
+# -----------------------------
 
-def build_llm_narrative(metric: str, rows: list[dict], style: str = "executive") -> Tuple[str, str, str]:
+def _get_client() -> Optional[OpenAI]:
+    key = os.getenv("OPENAI_API_KEY")
+    if not key:
+        return None
+    return OpenAI(api_key=key)
+
+
+def build_llm_narrative(metric: str, rows: List[Dict[str, Any]], style: str = "executive") -> Tuple[str, str, str]:
     """
     LLM-powered narrative.
     Returns (narrative, risk, recommendation).
@@ -112,7 +149,8 @@ def build_llm_narrative(metric: str, rows: list[dict], style: str = "executive")
     if not rows:
         return ("No data found.", "No risk signals.", "Insert KPI data first.")
 
-    if not os.getenv("OPENAI_API_KEY"):
+    client = _get_client()
+    if client is None:
         return build_narrative(metric, rows, style=style)
 
     try:
@@ -130,12 +168,12 @@ RECOMMENDATION: <one paragraph>
 """.strip()
 
         resp = client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"),
             messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
         )
 
-        text = resp.choices[0].message.content.strip()
+        text = (resp.choices[0].message.content or "").strip()
 
         def _pick(prefix: str) -> str:
             for line in text.splitlines():
@@ -154,3 +192,35 @@ RECOMMENDATION: <one paragraph>
 
     except Exception:
         return build_narrative(metric, rows, style=style)
+
+
+def analyze_metric(metric: str, range_: str, style: str = "executive") -> Dict[str, Any]:
+    """
+    This helper returns the final response shape INCLUDING debug SQL info.
+    If your router/service already builds an `out` dict elsewhere,
+    you can copy just the out["debug"] block.
+    """
+    used_table = "kpi_monthly"
+    used_sql = build_metric_sql(metric=metric, range_=range_)
+    rows = fetch_metric_rows(used_sql)
+
+    insight, risk, rec = build_llm_narrative(metric, rows, style=style)
+
+    out: Dict[str, Any] = {
+        "metric": metric,
+        "range": range_,
+        "style": style,
+        "table": used_table,
+        "data": rows,
+        "narrative": insight,
+        "risk": risk,
+        "recommendation": rec,
+    }
+
+    out["debug"] = {
+        "sql": used_sql,
+        "row_count": len(rows),
+        "table": used_table,
+    }
+
+    return out
